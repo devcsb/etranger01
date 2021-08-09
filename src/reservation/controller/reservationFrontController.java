@@ -10,6 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.action.Action;
 import common.vo.ActionForward;
+import reservation.action.ReservationInfoAction;
+import reservation.action.ReservationInsertAction;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import common.action.Action;
+import common.vo.ActionForward;
 
 @WebServlet("*.rs") // 서블릿(Controller)이 매핑을 담당할 주소 설정
 public class reservationFrontController extends HttpServlet {
@@ -23,7 +35,35 @@ public class reservationFrontController extends HttpServlet {
 		Action action = null;
 		ActionForward forward = null;
 
-		
+		if (command.equals("/ReservationInfo.rs")) {
+			// MemberReservationInfoAction 클래스로 이동
+			action = new ReservationInfoAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		else if (command.equals("/ReservationInsert.rs")) {
+			// MemberReservationInfoAction 클래스로 이동
+			action = new ReservationInsertAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		// ActionForward 객체의 정보에 따른 포워딩
+		if (forward != null) {
+			if (forward.isRedirect()) { // 리다이렉트 방식
+				response.sendRedirect(forward.getPath());
+			} else { // 디스패치 방식
+				RequestDispatcher dispatcher = request.getRequestDispatcher(forward.getPath());
+				dispatcher.forward(request, response);
+			}
+		}
 
 	}
 

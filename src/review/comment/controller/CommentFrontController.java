@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.action.Action;
 import common.vo.ActionForward;
+import review.comment.action.CommentDeleteProAction;
+import review.comment.action.CommentListAjax;
+import review.comment.action.CommentModifyProAction;
+import review.comment.action.CommentReplyProAction;
+import review.comment.action.CommentWriteAction;
 ;
 
 @WebServlet("*.cm")
@@ -23,7 +28,51 @@ public class CommentFrontController extends HttpServlet{
 			Action action = null;
 			ActionForward forward = null;
 			
+			if(command.equals("/CommentWrite.cm")) {
+				action = new CommentWriteAction();
+				try {
+					forward=action.execute(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}else if(command.equals("/CommentModifyPro.cm")){
+				action = new CommentModifyProAction();
+				try {
+					forward=action.execute(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}else if(command.equals("/CommentDeletePro.cm")){
+				action = new CommentDeleteProAction();
+				try {
+					forward=action.execute(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}else if(command.equals("/CommentReplyPro.cm")){
+				action = new CommentReplyProAction();
+				try {
+					forward=action.execute(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}else if(command.equals("/CommentListAjax.cm")){
+				action = new CommentListAjax();
+				try {
+					forward=action.execute(request, response);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			
+			if (forward != null) {
+				if (forward.isRedirect()) { 
+					response.sendRedirect(forward.getPath());
+				} else { 
+					RequestDispatcher dispatcher = request.getRequestDispatcher(forward.getPath());
+					dispatcher.forward(request, response);
+				}
+			}
 			
 	}
 	

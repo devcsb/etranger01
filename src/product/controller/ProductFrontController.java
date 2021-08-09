@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.action.Action;
 import common.vo.ActionForward;
+import product.action.CategoryDetailAction;
+import product.action.CategoryListAction;
+import product.action.DeleteWishAction;
+import product.action.InsertWishAction;
+import product.action.ReviewListAction;
 
 @WebServlet("*.pr") // 서블릿(Controller)이 매핑을 담당할 주소 설정
 public class ProductFrontController extends HttpServlet {
@@ -23,7 +28,65 @@ public class ProductFrontController extends HttpServlet {
 		Action action = null;
 		ActionForward forward = null;
 
-		
+		// 추출한 서블릿 주소 매핑
+		if (command.equals("/ProductList.pr")) {
+			action = new CategoryListAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (command.equals("/tours.pr")) {
+			forward = new ActionForward();
+			forward.setPath("product/tours.jsp");
+
+		} else if (command.equals("/CategoryListSearch.pr")) {
+			action = new CategoryListAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (command.equals("/CategoryDetail.pr")) {
+			action = new CategoryDetailAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (command.equals("/InsertWish.pr")) {
+			action = new InsertWishAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if (command.equals("/DeleteWish.pr")) {
+			action = new DeleteWishAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else if (command.equals("/ReviewList.pr")) {
+			action = new ReviewListAction();
+			try {
+				forward = action.execute(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		// ActionForward 객체의 정보에 따른 포워딩
+		if (forward != null) {
+			if (forward.isRedirect()) { // 리다이렉트 방식
+				response.sendRedirect(forward.getPath());
+			} else { // 디스패치 방식
+				RequestDispatcher dispatcher = request.getRequestDispatcher(forward.getPath());
+				dispatcher.forward(request, response);
+			}
+		}
 
 	}
 
